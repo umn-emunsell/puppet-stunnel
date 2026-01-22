@@ -153,6 +153,7 @@
 define stunnel::connection (
   String                         $stunnel_name      = $name,
   Enum['present','absent']       $ensure            = 'present',
+  Boolean                        $manage_cert_files = false,
   Boolean                        $manage_service    = true,
   Optional[Boolean]              $active            = undef,
   Optional[Variant[
@@ -211,6 +212,7 @@ define stunnel::connection (
     }
   }
 
+  if $manage_cert_files {
   if $ca_file_path {
     $ca_file = $ca_file_path
     if $ca_file_content {
@@ -279,7 +281,7 @@ define stunnel::connection (
       mode    => '0600',
     }
   }
-
+ }
   $config_file = "${stunnel::config_dir}${path_connector}${stunnel_name}.conf"
 
   file { $config_file:
